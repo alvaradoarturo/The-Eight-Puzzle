@@ -5,6 +5,11 @@ using namespace std;
 
 enum puzzleOperators {moveLeft, moveRight, moveUp, moveDown};
 
+struct movablePiece {
+    int row;
+    int column;
+};
+
 class puzzle {
     private:
         int puzzleBoard[3][3];
@@ -21,6 +26,9 @@ class puzzle {
         }
         void generatePuzzle(int arr[]);
         void printPuzzle();
+        void printBlankPosition();
+    protected:
+        movablePiece blankSquare;
 };
 
 puzzle::puzzle(){
@@ -37,6 +45,8 @@ puzzle::puzzle(int arr[]){
 void puzzle::defaultPuzzle() {
     int defaultBoard[9] = { 1, 2, 3, 4, 8, 0, 7, 6, 5};
     generatePuzzle(defaultBoard);
+    blankSquare.row = 1;
+    blankSquare.column = 2;
      
 }
 void puzzle::generateGoalState(){
@@ -57,7 +67,12 @@ void puzzle::generatePuzzle(int arr[]) {
         for(int j = 0; j < 3; ++j){
             puzzleBoard[i][j] = arr[boardIncrementer];
             boardIncrementer++; 
-        }
+            if(puzzleBoard[i][j] == 0)
+            {
+                blankSquare.row = i;
+                blankSquare.column = j;
+            }    
+       }
     }   
 }
 void puzzle::printPuzzle(){
@@ -75,6 +90,10 @@ void puzzle::printPuzzle(){
            }
         }
     }   
+}
+void puzzle::printBlankPosition(){
+    cout << "Row: " << blankSquare.row + 1 << endl;
+    cout << "Col: " << blankSquare.column + 1 << endl;
 }
 
 #endif

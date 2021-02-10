@@ -24,11 +24,7 @@ int main(int argc, char** argv)
         userPuzzle = new puzzle(puzzleArray);
     }
     userPuzzle->printPuzzle();
+    userPuzzle->printBlankPosition();
     
-
-
-
-
-
     return 0;
 }
