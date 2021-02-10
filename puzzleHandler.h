@@ -13,6 +13,7 @@ class puzzle {
         int goalState[3][3];
     public:
         puzzle();
+        puzzle(int arr[]);
         void generateGoalState();
         void defaultPuzzle();
         void moveEmptyPiece(enum puzzleOperators){
@@ -25,6 +26,11 @@ class puzzle {
 puzzle::puzzle(){
     cout << "Reached Constructor" << endl;
     defaultPuzzle();
+    generateGoalState();
+}
+puzzle::puzzle(int arr[]){
+    cout << "Reached custom constructor" << endl;
+    generatePuzzle(arr);
     generateGoalState();
 }
 

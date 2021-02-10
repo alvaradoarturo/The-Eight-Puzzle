@@ -14,7 +14,14 @@ int main(int argc, char** argv)
         userPuzzle = new puzzle();
     }
     else{
-        userPuzzle = new puzzle();
+        // userPuzzle = new puzzle();
+        int puzzleElement;
+        int puzzleArray[9];
+        for(int i = 0 ; i < 9 ; ++i){
+            cin >> puzzleElement;
+            puzzleArray[i] = puzzleElement;
+        }
+        userPuzzle = new puzzle(puzzleArray);
     }
     userPuzzle->printPuzzle();
     

@@ -17,7 +17,7 @@ int startingMenu(){
     }
 
     if(userInput == 2){
-     ;   
+        return userInput;
     }
 
     else{
