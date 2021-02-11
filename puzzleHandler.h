@@ -35,12 +35,10 @@ class puzzle {
 };
 
 puzzle::puzzle(){
-    cout << "Reached Constructor" << endl;
     defaultPuzzle();
     generateGoalState();
 }
 puzzle::puzzle(int arr[]){
-    cout << "Reached custom constructor" << endl;
     generatePuzzle(arr);
     generateGoalState();
 }
@@ -64,7 +62,6 @@ void puzzle::generateGoalState(){
     
 }
 void puzzle::generatePuzzle(int arr[]) {
-    cout << "Reached generate puzzle" << endl;
     int boardIncrementer = 0;
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
@@ -79,7 +76,6 @@ void puzzle::generatePuzzle(int arr[]) {
     }   
 }
 void puzzle::printPuzzle(){
-    cout << "Reached print puzzle" << endl;
     int columnCount = 0;
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){

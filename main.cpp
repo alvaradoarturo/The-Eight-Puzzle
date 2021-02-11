@@ -4,14 +4,14 @@
 #include <queue>
 #include "utilityFunctions.h"
 #include "puzzleHandler.h"
+#include "ucSearch.h"
 using namespace std;
+
 
 
 int main(int argc, char** argv)
 {
-    
-    
-    
+    priority_queue<puzzle*> puzzleHeap;
     puzzle *userPuzzle;
     int option = startingMenu();
     if(option == 1){
@@ -27,6 +27,7 @@ int main(int argc, char** argv)
         }
         userPuzzle = new puzzle(puzzleArray);
     }
+    puzzleHeap.push(userPuzzle);
     userPuzzle->printPuzzle();
     userPuzzle->printBlankPosition();
 
