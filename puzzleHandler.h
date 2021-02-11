@@ -1,6 +1,9 @@
 #ifndef PUZZLEHANDLER_H
 #define PUZZLEHANDLER_H
 
+#define col_max 2
+#define row_max 2
+
 using namespace std;
 
 enum puzzleOperators {moveLeft, moveRight, moveUp, moveDown};
@@ -92,8 +95,8 @@ void puzzle::printPuzzle(){
     }   
 }
 void puzzle::printBlankPosition(){
-    cout << "Row: " << blankSquare.row + 1 << endl;
-    cout << "Col: " << blankSquare.column + 1 << endl;
+    cout << "Row: " << blankSquare.row  << endl;
+    cout << "Col: " << blankSquare.column << endl;
 }
 
 int* puzzle::blankUp(puzzle parentNode){
@@ -105,26 +108,26 @@ int* puzzle::blankUp(puzzle parentNode){
     else{
         for(int i = 0; i < 3; ++i){
             for(int j = 0; j < 3; ++j){
-                possibleArray[i][j] =  puzzleBoard[i][j] ;
+                possibleArray[i][j] = parentNode.puzzleBoard[i][j] ;
             } 
         }
         int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
-        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row - 1][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row - 1][parentNode.blankSquare.column ];
         possibleArray[parentNode.blankSquare.row - 1][parentNode.blankSquare.column] = swap;
     }
-    static int returnedArray[9];
+    static int upArray[9];
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
-            returnedArray[boardIncrementer] = possibleArray[i][j];
+            upArray[boardIncrementer] = possibleArray[i][j];
             boardIncrementer++;   
         } 
     }
-    return returnedArray;
+    return upArray;
 }
 int* puzzle::blankDown(puzzle parentNode){
     int possibleArray[3][3];
     int boardIncrementer = 0;
-    if(parentNode.blankSquare.row == 0){
+    if(parentNode.blankSquare.row == row_max){
         return NULL;
     }
     else{
@@ -137,19 +140,19 @@ int* puzzle::blankDown(puzzle parentNode){
         possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row + 1][parentNode.blankSquare.column];
         possibleArray[parentNode.blankSquare.row + 1][parentNode.blankSquare.column] = swap;
     }
-    static int returnedArray[9];
+    static int downArray[9];
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
-            returnedArray[boardIncrementer] = possibleArray[i][j];
+            downArray[boardIncrementer] = possibleArray[i][j];
             boardIncrementer++;   
         } 
     }
-    return returnedArray;
+    return downArray;
 }
 int* puzzle::blankRight(puzzle parentNode){
     int possibleArray[3][3];
     int boardIncrementer = 0;
-    if(parentNode.blankSquare.row == 0){
+    if(parentNode.blankSquare.column == col_max){
         return NULL;
     }
     else{
@@ -159,22 +162,22 @@ int* puzzle::blankRight(puzzle parentNode){
             } 
         }
         int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
-        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column - 1];
-        possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column - 1] = swap;
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column + 1];
+        possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column + 1 ] = swap;
     }
-    static int returnedArray[9];
+    static int rightArray[9];
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
-            returnedArray[boardIncrementer] = possibleArray[i][j];
+            rightArray[boardIncrementer] = possibleArray[i][j];
             boardIncrementer++;   
         } 
     }
-    return returnedArray;
+    return rightArray;
 }
 int* puzzle::blankLeft(puzzle parentNode){
     int possibleArray[3][3];
     int boardIncrementer = 0;
-    if(parentNode.blankSquare.row == 0){
+    if(parentNode.blankSquare.column == 0){
         return NULL;
     }
     else{
@@ -184,17 +187,17 @@ int* puzzle::blankLeft(puzzle parentNode){
             } 
         }
         int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
-        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column + 1];
-        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column + 1] = swap;
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column - 1];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column - 1] = swap;
     }
-    static int returnedArray[9];
+    static int leftArray[9];
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
-            returnedArray[boardIncrementer] = possibleArray[i][j];
+            leftArray[boardIncrementer] = possibleArray[i][j];
             boardIncrementer++;   
         } 
     }
-    return returnedArray;
+    return leftArray;
 }
 
 #endif

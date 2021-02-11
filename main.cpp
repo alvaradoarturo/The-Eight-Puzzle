@@ -30,6 +30,7 @@ int main(int argc, char** argv)
     userPuzzle->printPuzzle();
     userPuzzle->printBlankPosition();
 
+
     puzzle *secondPuzzle = new puzzle(userPuzzle->blankUp(*userPuzzle)); 
     if(secondPuzzle->puzzleBoard != NULL){
         secondPuzzle->printPuzzle();
