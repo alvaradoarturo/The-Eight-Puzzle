@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <unistd.h>
+#include <queue>
 #include "utilityFunctions.h"
 #include "puzzleHandler.h"
 using namespace std;
@@ -8,6 +9,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    
+    
+    
     puzzle *userPuzzle;
     int option = startingMenu();
     if(option == 1){
@@ -25,6 +29,13 @@ int main(int argc, char** argv)
     }
     userPuzzle->printPuzzle();
     userPuzzle->printBlankPosition();
+
+    puzzle *secondPuzzle = new puzzle(userPuzzle->blankUp(*userPuzzle)); 
+    if(secondPuzzle->puzzleBoard != NULL){
+        secondPuzzle->printPuzzle();
+        secondPuzzle->printBlankPosition();    
+    }
+
     
     return 0;
 }

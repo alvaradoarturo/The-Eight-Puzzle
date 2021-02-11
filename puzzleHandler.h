@@ -12,23 +12,23 @@ struct movablePiece {
 
 class puzzle {
     private:
-        int puzzleBoard[3][3];
         int depthReached;
         int nodesExpanded;
         int goalState[3][3];
+        movablePiece blankSquare;
     public:
         puzzle();
         puzzle(int arr[]);
         void generateGoalState();
         void defaultPuzzle();
-        void moveEmptyPiece(enum puzzleOperators){
-            ;
-        }
+        int* blankUp(puzzle parentNode);
+        int* blankDown(puzzle parentNode);
+        int* blankLeft(puzzle parentNode);
+        int* blankRight(puzzle parentNode);        
         void generatePuzzle(int arr[]);
         void printPuzzle();
         void printBlankPosition();
-    protected:
-        movablePiece blankSquare;
+        int puzzleBoard[3][3];
 };
 
 puzzle::puzzle(){
@@ -94,6 +94,107 @@ void puzzle::printPuzzle(){
 void puzzle::printBlankPosition(){
     cout << "Row: " << blankSquare.row + 1 << endl;
     cout << "Col: " << blankSquare.column + 1 << endl;
+}
+
+int* puzzle::blankUp(puzzle parentNode){
+    int possibleArray[3][3];
+    int boardIncrementer = 0;
+    if(parentNode.blankSquare.row == 0){
+        return NULL;
+    }
+    else{
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                possibleArray[i][j] =  puzzleBoard[i][j] ;
+            } 
+        }
+        int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row - 1][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row - 1][parentNode.blankSquare.column] = swap;
+    }
+    static int returnedArray[9];
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
+            returnedArray[boardIncrementer] = possibleArray[i][j];
+            boardIncrementer++;   
+        } 
+    }
+    return returnedArray;
+}
+int* puzzle::blankDown(puzzle parentNode){
+    int possibleArray[3][3];
+    int boardIncrementer = 0;
+    if(parentNode.blankSquare.row == 0){
+        return NULL;
+    }
+    else{
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                possibleArray[i][j] =  puzzleBoard[i][j] ;
+            } 
+        }
+        int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row + 1][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row + 1][parentNode.blankSquare.column] = swap;
+    }
+    static int returnedArray[9];
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
+            returnedArray[boardIncrementer] = possibleArray[i][j];
+            boardIncrementer++;   
+        } 
+    }
+    return returnedArray;
+}
+int* puzzle::blankRight(puzzle parentNode){
+    int possibleArray[3][3];
+    int boardIncrementer = 0;
+    if(parentNode.blankSquare.row == 0){
+        return NULL;
+    }
+    else{
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                possibleArray[i][j] =  puzzleBoard[i][j] ;
+            } 
+        }
+        int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column - 1];
+        possibleArray[parentNode.blankSquare.row ][parentNode.blankSquare.column - 1] = swap;
+    }
+    static int returnedArray[9];
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
+            returnedArray[boardIncrementer] = possibleArray[i][j];
+            boardIncrementer++;   
+        } 
+    }
+    return returnedArray;
+}
+int* puzzle::blankLeft(puzzle parentNode){
+    int possibleArray[3][3];
+    int boardIncrementer = 0;
+    if(parentNode.blankSquare.row == 0){
+        return NULL;
+    }
+    else{
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                possibleArray[i][j] =  puzzleBoard[i][j] ;
+            } 
+        }
+        int swap = possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column] =  possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column + 1];
+        possibleArray[parentNode.blankSquare.row][parentNode.blankSquare.column + 1] = swap;
+    }
+    static int returnedArray[9];
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
+            returnedArray[boardIncrementer] = possibleArray[i][j];
+            boardIncrementer++;   
+        } 
+    }
+    return returnedArray;
 }
 
 #endif
