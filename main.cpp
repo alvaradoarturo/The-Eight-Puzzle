@@ -11,7 +11,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    priority_queue<puzzle*> puzzleHeap;
+    queue<puzzle*> puzzleHeap;
     puzzle *userPuzzle;
     int option = startingMenu();
     if(option == 1){
@@ -27,17 +27,14 @@ int main(int argc, char** argv)
         }
         userPuzzle = new puzzle(puzzleArray);
     }
-    puzzleHeap.push(userPuzzle);
+    // Check to see original state of puzzle
+    cout << "This is our starting puzzle" << endl;
     userPuzzle->printPuzzle();
     userPuzzle->printBlankPosition();
-
-
-    puzzle *secondPuzzle = new puzzle(userPuzzle->blankUp(*userPuzzle)); 
-    if(secondPuzzle->puzzleBoard != NULL){
-        secondPuzzle->printPuzzle();
-        secondPuzzle->printBlankPosition();    
-    }
-
     
+    // Call the gerenal search algorithm for Uniform Cost
+    cout << "Calling UC Search" << endl;
+    generalSearh(userPuzzle, puzzleHeap);
+        
     return 0;
 }

@@ -15,9 +15,6 @@ struct movablePiece {
 
 class puzzle {
     private:
-        int depthReached;
-        int nodesExpanded;
-        int goalState[3][3];
         movablePiece blankSquare;
     public:
         puzzle();
@@ -31,7 +28,12 @@ class puzzle {
         void generatePuzzle(int arr[]);
         void printPuzzle();
         void printBlankPosition();
+        void generalSearh(puzzle* problem,  priority_queue<puzzle*> puzzleHeap);    
         int puzzleBoard[3][3];
+        int goalState[3][3];
+        bool puzzleEquality(int arr[3][3], int goal[3][3]);
+        int depthLevel = 0;
+
 };
 
 puzzle::puzzle(){
@@ -148,7 +150,7 @@ int* puzzle::blankDown(puzzle parentNode){
 int* puzzle::blankRight(puzzle parentNode){
     int possibleArray[3][3];
     int boardIncrementer = 0;
-    if(parentNode.blankSquare.column == col_max){
+    if(parentNode.blankSquare.column == 2){
         return NULL;
     }
     else{
@@ -195,5 +197,82 @@ int* puzzle::blankLeft(puzzle parentNode){
     }
     return leftArray;
 }
+
+bool puzzle::puzzleEquality(int arr[3][3], int goal[3][3]){
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
+            if(arr[i][j] != goal[i][j]){
+                return false;
+            }          
+        } 
+    }
+    return true;
+}
+
+void generalSearh(puzzle* problem, queue<puzzle*> puzzleHeap){
+    puzzleHeap.push(problem);
+    bool finishedProblem = false;
+    int nodesExpanded = 0;
+    int depthReached = 0;
+    puzzle *topNode;
+    do {
+        if(puzzleHeap.empty()){
+            cout << "NO SOLUTION" << endl;
+            break;
+        }
+        cout << "Next solution" << endl;
+        topNode = puzzleHeap.front();
+        puzzleHeap.pop();
+        topNode->printPuzzle();
+        if(problem->puzzleEquality(problem->goalState, topNode->puzzleBoard )){
+            finishedProblem = true;
+            cout << "Solution Found" << endl;
+            break;
+        }
+        // Expands up operation
+        int* upArray;
+        upArray = topNode->blankUp(*topNode);
+        if(upArray != NULL){
+            puzzle *upPuzzle = new puzzle(upArray);
+            nodesExpanded++;
+            upPuzzle->depthLevel = topNode->depthLevel + 1;
+            puzzleHeap.push(upPuzzle);
+        }
+        // Expands down operation
+        int* downArray;
+        downArray = topNode->blankDown(*topNode);
+        if(downArray != NULL){
+            puzzle *downPuzzle = new puzzle(downArray);
+            nodesExpanded++;
+            downPuzzle->depthLevel = topNode->depthLevel + 1;
+            puzzleHeap.push(downPuzzle);
+        }
+        // Expands Right puzzle
+        int* rightArray;
+        rightArray = topNode->blankRight(*topNode);
+        if(rightArray != NULL){
+            puzzle *rightPuzzle = new puzzle(rightArray);
+            nodesExpanded++;
+            rightPuzzle->depthLevel = topNode->depthLevel + 1;
+            puzzleHeap.push(rightPuzzle);
+        }
+
+        // Expands Left Puzzle
+        int* leftArray;
+        leftArray = topNode->blankLeft(*topNode);
+        if(leftArray != NULL){
+            puzzle *leftPuzzle = new puzzle(leftArray);
+            nodesExpanded++;
+            leftPuzzle->depthLevel = topNode->depthLevel + 1;
+            puzzleHeap.push(leftPuzzle);
+        }
+        
+    }while(1);
+    cout << "To solve this problem the search algorithm expanded a total of " << nodesExpanded << " nodes." << endl;
+    cout << "The depth of the goal node was: " << topNode->depthLevel << "."<<  endl;
+
+}
+
+
 
 #endif
