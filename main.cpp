@@ -2,16 +2,21 @@
 #include <cstdio>
 #include <unistd.h>
 #include <queue>
+#include <list>
+#include <bits/stdc++.h>
 #include "utilityFunctions.h"
 #include "puzzleHandler.h"
 #include "ucSearch.h"
-using namespace std;
 
+using namespace std;
 
 
 int main(int argc, char** argv)
 {
     queue<puzzle*> puzzleHeap;
+    //queue<puzzle*> priorityHeap;
+    //vector<puzzle*> priorityHeap;
+
     puzzle *userPuzzle;
     int option = startingMenu();
     if(option == 1){
@@ -32,9 +37,23 @@ int main(int argc, char** argv)
     userPuzzle->printPuzzle();
     userPuzzle->printBlankPosition();
     
-    // Call the gerenal search algorithm for Uniform Cost
-    cout << "Calling UC Search" << endl;
-    generalSearh(userPuzzle, puzzleHeap);
+    cout << "Enter your choice of algorithm:" << endl;
+    cout << "   1. Uniform Cost Search" << endl;
+    cout << "   2. A* with the Misplaced Tile Heuristic" << endl;
+    cout << "   3. A* with the Manhattan Distance Heuristic" << endl;
+    cin >> option;
+
+    if(option == 1){
+        // Call the gerenal search algorithm for Uniform Cost
+        cout << "Calling UC Search" << endl;
+        userPuzzle->generalSearh(userPuzzle, puzzleHeap);       
+    }
+    else if(option == 2){
+        // Calling A* with Misplaced Tile
+        cout << "A* with Misplaced Tile" << endl;
+        userPuzzle->misplacedTile(userPuzzle);
+    }
+
         
     return 0;
 }
