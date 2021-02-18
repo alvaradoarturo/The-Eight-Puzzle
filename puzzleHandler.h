@@ -14,7 +14,6 @@ using namespace std::chrono;
 
 enum puzzleOperators {moveLeft, moveRight, moveUp, moveDown};
 
-
 struct movablePiece {
     int row;
     int column;
@@ -35,7 +34,6 @@ class puzzle {
         int* blankRight(puzzle parentNode);        
         void generatePuzzle(int arr[]);
         void printPuzzle();
-        void printBlankPosition();
         void generalSearh(puzzle* problem,  queue<puzzle*> puzzleHeap); 
         void misplacedTile(puzzle* problem);   
         void manhattanDistance(puzzle* problem);
@@ -52,8 +50,6 @@ class puzzle {
         bool repeatedState(puzzle*);
         void sortHeap();
 };
-
-
 
 puzzle::puzzle(){
     defaultPuzzle();
@@ -109,10 +105,6 @@ void puzzle::printPuzzle(){
            }
         }
     }   
-}
-void puzzle::printBlankPosition(){
-    cout << "Row: " << blankSquare.row  << endl;
-    cout << "Col: " << blankSquare.column << endl;
 }
 
 int* puzzle::blankUp(puzzle parentNode){
@@ -239,9 +231,9 @@ void puzzle::generalSearh(puzzle* problem, queue<puzzle*> puzzleHeap){
             cout << "NO SOLUTION" << endl;
             break;
         }
-        // cout << "Next solution" << endl;
         topNode = puzzleHeap.front();
         puzzleHeap.pop();
+        nodesExpanded++;
         // topNode->printPuzzle();
         if(problem->puzzleEquality(problem->goalState, topNode->puzzleBoard )){
             finishedProblem = true;
@@ -253,7 +245,6 @@ void puzzle::generalSearh(puzzle* problem, queue<puzzle*> puzzleHeap){
         upArray = topNode->blankUp(*topNode);
         if(upArray != NULL){
             puzzle *upPuzzle = new puzzle(upArray);
-            nodesExpanded++;
             upPuzzle->depthLevel = topNode->depthLevel + 1;
             puzzleHeap.push(upPuzzle);
         }
@@ -262,7 +253,6 @@ void puzzle::generalSearh(puzzle* problem, queue<puzzle*> puzzleHeap){
         downArray = topNode->blankDown(*topNode);
         if(downArray != NULL){
             puzzle *downPuzzle = new puzzle(downArray);
-            nodesExpanded++;
             downPuzzle->depthLevel = topNode->depthLevel + 1;
             puzzleHeap.push(downPuzzle);
         }
@@ -271,27 +261,24 @@ void puzzle::generalSearh(puzzle* problem, queue<puzzle*> puzzleHeap){
         rightArray = topNode->blankRight(*topNode);
         if(rightArray != NULL){
             puzzle *rightPuzzle = new puzzle(rightArray);
-            nodesExpanded++;
             rightPuzzle->depthLevel = topNode->depthLevel + 1;
             puzzleHeap.push(rightPuzzle);
         }
-
         // Expands Left Puzzle
         int* leftArray;
         leftArray = topNode->blankLeft(*topNode);
         if(leftArray != NULL){
             puzzle *leftPuzzle = new puzzle(leftArray);
-            nodesExpanded++;
             leftPuzzle->depthLevel = topNode->depthLevel + 1;
             puzzleHeap.push(leftPuzzle);
         }
-        
     }while(1);
     cout << "To solve this problem the search algorithm expanded a total of " << nodesExpanded << " nodes." << endl;
     cout << "The depth of the goal node was: " << topNode->depthLevel << "."<<  endl;
+    cout << "Number of nodes inside queue at the time of completion: " << puzzleHeap.size() << "." << endl;
     auto stop = high_resolution_clock::now(); 
     auto duration = duration_cast<milliseconds>(stop - start); 
-    cout << "Milliseconds: " << duration.count() << endl; 
+    cout << duration.count() << endl; 
 }
 
 void puzzle::misplacedTile(puzzle* problem){
@@ -309,11 +296,9 @@ void puzzle::misplacedTile(puzzle* problem){
             cout << "NO SOLUTION" << endl;
             break;
         }
-       // cout << "Next solution" << endl;
         topNode = priorityHeap.front();
-
-       priorityHeap.erase(priorityHeap.begin());
-       nodesExpanded++;
+        priorityHeap.erase(priorityHeap.begin());
+        nodesExpanded++;
         if(problem->puzzleEquality(problem->goalState, topNode->puzzleBoard )){
             cout << "Solution Found" << endl;
             break;
@@ -326,9 +311,7 @@ void puzzle::misplacedTile(puzzle* problem){
             upPuzzle->depthLevel = topNode->depthLevel + 1;
             upPuzzle->heuristicVal = upPuzzle->calculateMisplacedTile(upPuzzle) ;
             upPuzzle->estCheapestSol = upPuzzle->heuristicVal + upPuzzle->depthLevel;
-           // if(upPuzzle->repeatedState(upPuzzle) == false){
-               priorityHeap.push_back(upPuzzle);
-           // }
+            priorityHeap.push_back(upPuzzle);
         }
         // Expands down operation
         int* downArray;
@@ -338,9 +321,7 @@ void puzzle::misplacedTile(puzzle* problem){
             downPuzzle->depthLevel = topNode->depthLevel + 1;
             downPuzzle->heuristicVal = downPuzzle->calculateMisplacedTile(downPuzzle)  ;
             downPuzzle->estCheapestSol = downPuzzle->heuristicVal + downPuzzle->depthLevel;
-        //    if(downPuzzle->repeatedState(downPuzzle) == false){
-               priorityHeap.push_back(downPuzzle);
-        //    }
+            priorityHeap.push_back(downPuzzle);
         }
         // Expands Right puzzle
         int* rightArray;
@@ -350,11 +331,8 @@ void puzzle::misplacedTile(puzzle* problem){
             rightPuzzle->depthLevel = topNode->depthLevel + 1;
             rightPuzzle->heuristicVal = rightPuzzle->calculateMisplacedTile(rightPuzzle) ;
             rightPuzzle->estCheapestSol = rightPuzzle->heuristicVal + rightPuzzle->depthLevel;
-          //  if(rightPuzzle->repeatedState(rightPuzzle) == false){
-                priorityHeap.push_back(rightPuzzle);
-            //}
+            priorityHeap.push_back(rightPuzzle);
         }
-
         // Expands Left Puzzle
         int* leftArray;
         leftArray = topNode->blankLeft(*topNode);
@@ -363,9 +341,7 @@ void puzzle::misplacedTile(puzzle* problem){
             leftPuzzle->depthLevel = topNode->depthLevel + 1;
             leftPuzzle->heuristicVal = leftPuzzle->calculateMisplacedTile(leftPuzzle);
             leftPuzzle->estCheapestSol = leftPuzzle->heuristicVal + leftPuzzle->depthLevel;
-           // if(leftPuzzle->repeatedState(leftPuzzle) == false){
-               priorityHeap.push_back(leftPuzzle);
-           // }
+            priorityHeap.push_back(leftPuzzle);
         }
         sortHeap();
     }while(1);
@@ -392,11 +368,10 @@ void puzzle::manhattanDistance(puzzle* problem){
             cout << "NO SOLUTION" << endl;
             break;
         }
-       // cout << "Next solution" << endl;
+        // Sets current node to first element in Priority Heap
         topNode = priorityHeap.front();
-
-       priorityHeap.erase(priorityHeap.begin());
-       nodesExpanded++;
+        priorityHeap.erase(priorityHeap.begin());
+        nodesExpanded++;
         if(problem->puzzleEquality(problem->goalState, topNode->puzzleBoard )){
             cout << "Solution Found" << endl;
             break;
@@ -409,9 +384,7 @@ void puzzle::manhattanDistance(puzzle* problem){
             upPuzzle->depthLevel = topNode->depthLevel + 1;
             upPuzzle->heuristicVal = upPuzzle->calculateManhattanDistance(upPuzzle) ;
             upPuzzle->estCheapestSol = upPuzzle->heuristicVal + upPuzzle->depthLevel;
-           // if(upPuzzle->repeatedState(upPuzzle) == false){
-               priorityHeap.push_back(upPuzzle);
-           // }
+            priorityHeap.push_back(upPuzzle);
         }
         // Expands down operation
         int* downArray;
@@ -421,9 +394,7 @@ void puzzle::manhattanDistance(puzzle* problem){
             downPuzzle->depthLevel = topNode->depthLevel + 1;
             downPuzzle->heuristicVal = downPuzzle->calculateManhattanDistance(downPuzzle)  ;
             downPuzzle->estCheapestSol = downPuzzle->heuristicVal + downPuzzle->depthLevel;
-        //    if(downPuzzle->repeatedState(downPuzzle) == false){
-               priorityHeap.push_back(downPuzzle);
-        //    }
+            priorityHeap.push_back(downPuzzle);
         }
         // Expands Right puzzle
         int* rightArray;
@@ -433,11 +404,8 @@ void puzzle::manhattanDistance(puzzle* problem){
             rightPuzzle->depthLevel = topNode->depthLevel + 1;
             rightPuzzle->heuristicVal = rightPuzzle->calculateManhattanDistance(rightPuzzle) ;
             rightPuzzle->estCheapestSol = rightPuzzle->heuristicVal + rightPuzzle->depthLevel;
-          //  if(rightPuzzle->repeatedState(rightPuzzle) == false){
-                priorityHeap.push_back(rightPuzzle);
-            //}
+            priorityHeap.push_back(rightPuzzle);
         }
-
         // Expands Left Puzzle
         int* leftArray;
         leftArray = topNode->blankLeft(*topNode);
@@ -446,9 +414,7 @@ void puzzle::manhattanDistance(puzzle* problem){
             leftPuzzle->depthLevel = topNode->depthLevel + 1;
             leftPuzzle->heuristicVal = leftPuzzle->calculateManhattanDistance(leftPuzzle);
             leftPuzzle->estCheapestSol = leftPuzzle->heuristicVal + leftPuzzle->depthLevel;
-           // if(leftPuzzle->repeatedState(leftPuzzle) == false){
-               priorityHeap.push_back(leftPuzzle);
-           // }
+            priorityHeap.push_back(leftPuzzle);
         }
         sortHeap();
     }while(1);
@@ -470,10 +436,8 @@ int puzzle::calculateMisplacedTile(puzzle* currentPuzzle){
         } 
     }   
     return misplacedCnt;
-
-
-
 }
+
 int puzzle::calculateManhattanDistance(puzzle* currentPuzzle){
     int hueristicVal = 0;
     for(int i = 0; i < 3; ++i){
@@ -482,50 +446,42 @@ int puzzle::calculateManhattanDistance(puzzle* currentPuzzle){
                 if(currentPuzzle->puzzleBoard[i][j] == 1){
                     int row = 0;
                     int col = 0;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 2){
                     int row = 0;
                     int col = 1;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 3){
                     int row = 0;
                     int col = 2;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 4){
                     int row = 1;
                     int col = 0;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 5){
                     int row = 1;
                     int col = 1;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }  
                 else if(currentPuzzle->puzzleBoard[i][j] == 6){
                     int row = 1;
                     int col = 2;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 7){
                     int row = 2;
                     int col = 0;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else if(currentPuzzle->puzzleBoard[i][j] == 8){
                     int row = 2;
                     int col = 1;
-                    hueristicVal += abs(row - i);
-                    hueristicVal += abs(col - j);
+                    hueristicVal += abs(row - i) + abs(col - j);
                 }
                 else{
                     ;
@@ -534,7 +490,6 @@ int puzzle::calculateManhattanDistance(puzzle* currentPuzzle){
         } 
     }   
     return hueristicVal;
-
 }
 
 bool puzzle::repeatedState(puzzle* topPuzzle){
@@ -561,7 +516,6 @@ bool puzzle::repeatedState(puzzle* topPuzzle){
 }
 
 void puzzle::sortHeap(){
-    
     for(int i = 0 ; i < priorityHeap.size() ; i++){
         for(int j = i + 1 ; j < priorityHeap.size() ; j++){
             if(priorityHeap.at(j)->estCheapestSol < priorityHeap.at(i)->estCheapestSol){
@@ -572,6 +526,5 @@ void puzzle::sortHeap(){
         }
     }
 }
-
 
 #endif

@@ -14,16 +14,13 @@ using namespace std;
 int main(int argc, char** argv)
 {
     queue<puzzle*> puzzleHeap;
-    //queue<puzzle*> priorityHeap;
-    //vector<puzzle*> priorityHeap;
-
     puzzle *userPuzzle;
     int option = startingMenu();
+
     if(option == 1){
         userPuzzle = new puzzle();
     }
     else{
-        // userPuzzle = new puzzle();
         int puzzleElement;
         int puzzleArray[9];
         for(int i = 0 ; i < 9 ; ++i){
@@ -35,7 +32,6 @@ int main(int argc, char** argv)
     // Check to see original state of puzzle
     cout << "This is our starting puzzle" << endl;
     userPuzzle->printPuzzle();
-    userPuzzle->printBlankPosition();
     
     cout << "Enter your choice of algorithm:" << endl;
     cout << "   1. Uniform Cost Search" << endl;
@@ -60,8 +56,6 @@ int main(int argc, char** argv)
     }
     else{
         cout << "Sorry, option selected is not valid" << endl;
-    }
-
-        
+    }   
     return 0;
 }
