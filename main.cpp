@@ -53,6 +53,14 @@ int main(int argc, char** argv)
         cout << "A* with Misplaced Tile" << endl;
         userPuzzle->misplacedTile(userPuzzle);
     }
+        else if(option == 3){
+        // Calling A* with Manhattan Distance 
+        cout << "A* with Manhattan Distance" << endl;
+        userPuzzle->manhattanDistance(userPuzzle);
+    }
+    else{
+        cout << "Sorry, option selected is not valid" << endl;
+    }
 
         
     return 0;
