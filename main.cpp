@@ -10,10 +10,8 @@
 
 using namespace std;
 
-
 int main(int argc, char** argv)
 {
-    queue<puzzle*> puzzleHeap;
     puzzle *userPuzzle;
     int option = startingMenu();
 
@@ -42,17 +40,17 @@ int main(int argc, char** argv)
     if(option == 1){
         // Call the gerenal search algorithm for Uniform Cost
         cout << "Calling UC Search" << endl;
-        userPuzzle->generalSearh(userPuzzle, puzzleHeap);       
+        userPuzzle->generalSearch(userPuzzle, 1);       
     }
     else if(option == 2){
         // Calling A* with Misplaced Tile
         cout << "A* with Misplaced Tile" << endl;
-        userPuzzle->misplacedTile(userPuzzle);
+        userPuzzle->generalSearch(userPuzzle, 2);   
     }
         else if(option == 3){
         // Calling A* with Manhattan Distance 
         cout << "A* with Manhattan Distance" << endl;
-        userPuzzle->manhattanDistance(userPuzzle);
+        userPuzzle->generalSearch(userPuzzle, 3);   
     }
     else{
         cout << "Sorry, option selected is not valid" << endl;
