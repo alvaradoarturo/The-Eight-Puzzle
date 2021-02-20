@@ -231,6 +231,8 @@ void puzzle::generalSearch(puzzle* problem, int queuingFunction){
         }
         topNode = priorityHeap.front();
         priorityHeap.erase(priorityHeap.begin());
+        // topNode->printPuzzle();
+        // cout << "--------------------------" << endl;
         if(problem->puzzleEquality(problem->goalState, topNode->puzzleBoard )){
             cout << "Solution Found" << endl;
             break;
